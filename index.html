@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Payment</title>
+</head>
+<body>
+  <div class="payment-page-container">
+    <header class="payment-header">
+      <h1>Crypto Payment</h1>
+      <p class="subtitle">Secure and fast cryptocurrency payments</p>
+    </header>
+
+    <div class="payment-card">
+      <!-- Payment Form (Initial State) -->
+      <section id="payment-form-container" class="active" aria-labelledby="payment-form-title">
+        <h2 id="payment-form-title">Enter Payment Details</h2>
+        <form id="payment-form" novalidate>
+          <div class="form-group">
+            <label for="amount">Amount (USD)</label>
+            <div class="input-with-icon">
+              <span class="currency-symbol" aria-hidden="true">$</span>
+              <input type="number" id="amount" name="amount" min="1" step="0.01" required
+                     placeholder="0.00" aria-describedby="amount-error">
+            </div>
+            <div id="amount-error" class="error-message" aria-live="polite"></div>
+          </div>
+          
+          <div class="form-group">
+            <fieldset>
+              <legend>Select Payment Method</legend>
+              <div class="payment-methods" role="radiogroup" aria-required="true">
+              <div class="payment-method selected" data-payment="btc" role="radio" aria-checked="true" tabindex="0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12z" fill="#F7931A"/>
+                  <path d="M17.21 10.77c.22-1.44-.88-2.2-2.36-2.72l.48-1.94-1.18-.3-.47 1.89c-.31-.08-.62-.15-.94-.22l.47-1.9-1.18-.29-.48 1.93c-.26-.06-.51-.12-.75-.18l-1.63-.4-.31 1.26s.88.2.86.22c.48.12.56.43.55.68l-.55 2.2c.03 0 .07.03.11.04l-.11-.03-1.17 2.95c-.09.22-.32.55-.83.42.02.03-.86-.21-.86-.21l-.59 1.35 1.53.38.84.21-.49 1.95 1.18.3.48-1.94c.32.09.63.17.93.24l-.48 1.92 1.18.3.49-1.94c2 .38 3.5.23 4.13-1.58.51-1.46-.03-2.3-1.08-2.85.77-.18 1.35-.68 1.5-1.72zm-2.69 3.75c-.36 1.46-2.8.67-3.6.47l.64-2.57c.8.2 3.35.58 2.96 2.1zm.36-3.8c-.33 1.32-2.36.65-3.02.49l.58-2.33c.66.16 2.79.47 2.44 1.84z" fill="white"/>
+                </svg>
+                <div>Bitcoin</div>
+              </div>
+              <div class="payment-method" data-payment="eth" role="radio" aria-checked="false" tabindex="0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12z" fill="#627EEA"/>
+                  <path d="M12.37 3v6.65l5.63 2.52L12.37 3z" fill="white" fill-opacity="0.6"/>
+                  <path d="M12.37 3L6.75 12.17l5.62-2.52V3z" fill="white"/>
+                  <path d="M12.37 16.47v4.52l5.63-7.83-5.63 3.31z" fill="white" fill-opacity="0.6"/>
+                  <path d="M12.37 21v-4.52l-5.62-3.31 5.62 7.83z" fill="white"/>
+                  <path d="M12.37 15.43l5.63-3.26-5.63-2.52v5.78z" fill="white" fill-opacity="0.2"/>
+                  <path d="M6.75 12.17l5.62 3.26V9.65l-5.62 2.52z" fill="white" fill-opacity="0.6"/>
+                </svg>
+                <div>Ethereum</div>
+              </div>
+              <div class="payment-method" data-payment="sol" role="radio" aria-checked="false" tabindex="0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12z" fill="#000000"/>
+                  <path d="M6.06 14.42c.08-.08.2-.13.32-.13h14.26c.2 0 .3.24.16.38l-2.8 2.8c-.08.08-.2.13-.32.13H3.42c-.2 0-.3-.24-.16-.38l2.8-2.8zm0-7.85c.08-.08.2-.13.32-.13h14.26c.2 0 .3.24.16.38l-2.8 2.8c-.08.08-.2.13-.32.13H3.42c-.2 0-.3-.24-.16-.38l2.8-2.8zm14.74 3.27c-.08-.08-.2-.13-.32-.13H6.22c-.2 0-.3.24-.16.38l2.8 2.8c.08.08.2.13.32.13h14.26c.2 0 .3-.24.16-.38l-2.8-2.8z" fill="#00FFA3"/>
+                </svg>
+                <div>Solana</div>
+              </div>
+              <div class="payment-method" data-payment="usdc" role="radio" aria-checked="false" tabindex="0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12z" fill="#2775CA"/>
+                  <path d="M15.53 10.83c-.1-.48-.3-.89-.59-1.23a2.78 2.78 0 0 0-1.16-.79 5.23 5.23 0 0 0-1.74-.28v-2.1l-1.27.4v1.7c-.34 0-.68.01-1.02.04v-1.74l-1.27.4v1.7a18.5 18.5 0 0 0-1.63.06v.02l1.74.55v.01s.92-.3.91-.28c.5 0 .6.32.63.52v2.15c.05 0 .11 0 .18.03l-.18.01v3.01c-.03.13-.11.34-.46.34l-.91-.29-.63 1.08v.01l1.53.48v1.77l1.27-.4v-1.65c.34.01.67.01 1.02 0v1.65l1.27-.4v-1.78c2.19-.14 3.67-.75 3.87-2.55.16-1.45-.55-2.1-1.47-2.36.6-.3.98-.82 1.08-1.65zm-1.75 3.3c0 1.4-2.37 1.24-3.13 1.24v-2.48c.76 0 3.13-.24 3.13 1.23zm-.53-2.89c0 1.28-1.98 1.11-2.6 1.11V9.14c.62 0 2.6-.22 2.6 1.1z" fill="white"/>
+                </svg>
+                <div>USDC</div>
+              </div>
+              </div>
+            </fieldset>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email (for payment confirmation)</label>
+            <input type="email" id="email" name="email" required
+                   placeholder="your@email.com" aria-describedby="email-error">
+            <div id="email-error" class="error-message" aria-live="polite"></div>
+          </div>
+          
+          <button type="submit" class="btn-primary">
+            <span class="button-text">Continue to Payment</span>
+            <span class="button-loader" aria-hidden="true"></span>
+          </button>
+        </form>
+      </section>
+
+      <!-- Payment Details (After Form Submission) -->
+      <section id="payment-details-container" class="hidden" aria-labelledby="payment-details-title">
+        <h2 id="payment-details-title" class="visually-hidden">Payment Details</h2>
+        <div class="payment-status pending">
+          <div class="status-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="status-text">Waiting for payment</div>
+        </div>
+
+        <div class="payment-info">
+          <div class="info-row">
+            <span class="label">Amount:</span>
+            <span class="value" id="display-amount">$0.00</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Crypto Amount:</span>
+            <span class="value" id="display-crypto-amount">0.00 BTC</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Exchange Rate:</span>
+            <span class="value" id="display-exchange-rate">$0.00</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Payment Method:</span>
+            <span class="value" id="display-payment-method">Bitcoin (BTC)</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Session ID:</span>
+            <span class="value" id="display-session-id">-</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Expires:</span>
+            <span class="value" id="display-expires">-</span>
+          </div>
+        </div>
+
+        <div class="wallet-address-container">
+          <h3>Send Payment To:</h3>
+          <div class="qr-code-container">
+            <canvas id="qr-code" width="200" height="200"></canvas>
+          </div>
+          <div class="wallet-address">
+            <span id="wallet-address">Loading wallet address...</span>
+            <button id="copy-address" class="btn-icon" title="Copy to clipboard">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="payment-instructions">
+          <h3>Instructions:</h3>
+          <ol>
+            <li>Send exactly <strong id="instruction-amount">0.00 BTC</strong> to the address above</li>
+            <li>Scan the QR code with your wallet app or copy the address</li>
+            <li>Wait for blockchain confirmation (may take 10-30 minutes)</li>
+            <li>Once confirmed, you'll receive a confirmation email</li>
+          </ol>
+        </div>
+
+        <div class="action-buttons">
+          <button id="check-payment-status" class="btn-secondary">Check Payment Status</button>
+          <button id="cancel-payment" class="btn-text">Cancel Payment</button>
+        </div>
+      </div>
+
+      <!-- Payment Success (After Confirmation) -->
+      <section id="payment-success-container" class="hidden" aria-labelledby="payment-success-title">
+        <h2 id="payment-success-title" class="visually-hidden">Payment Successful</h2>
+        <div class="payment-status success">
+          <div class="status-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <div class="status-text">Payment Successful!</div>
+        </div>
+
+        <div class="success-message">
+          <p>Thank you for your payment. Your transaction has been completed successfully.</p>
+          <p>A confirmation email has been sent to <span id="confirmation-email">your@email.com</span>.</p>
+          <p>Transaction ID: <span id="transaction-id">-</span></p>
+        </div>
+
+        <div class="action-buttons">
+          <a href="/" class="btn-primary">Return to Homepage</a>
+          <a href="/dashboard" class="btn-secondary">Go to Dashboard</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <style>
+    :root {
+      --primary-color: #e02337;
+      --primary-color-dark: #c01020;
+      --secondary-color: #1f2937;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --text-color: #333;
+      --text-light: #6b7280;
+      --border-color: #e5e7eb;
+      --card-bg: #ffffff;
+      --body-bg: #f9fafb;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--body-bg);
+      color: var(--text-color);
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .payment-page-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .payment-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .payment-header h1 {
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--text-light);
+      margin-top: 0;
+    }
+
+    .payment-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .payment-card h2 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      color: var(--secondary-color);
+      font-size: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--secondary-color);
+    }
+
+    input[type="number"],
+    input[type="email"] {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(224, 35, 55, 0.1);
+    }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .currency-symbol {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+    }
+
+    .input-with-icon input {
+      padding-left: 1.75rem;
+    }
+
+    .payment-methods {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .payment-method {
+      flex: 1;
+      min-width: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background-color: rgba(31, 41, 55, 0.2);
+    }
+
+    .payment-method img {
+      height: 40px;
+      width: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    .payment-method.selected {
+      border-color: var(--primary-color);
+      background-color: rgba(224, 35, 55, 0.1);
+      box-shadow: 0 4px 6px -1px rgba(224, 35, 55, 0.2);
+    }
+
+    .btn-primary {
+      display: block;
+      width: 100%;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.2s;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-color-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      display: block;
+      width: 100%;
+      background-color: var(--secondary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.2s;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: #111827;
+      transform: translateY(-1px);
+    }
+
+    .btn-text {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      padding: 0.5rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .btn-text:hover {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+
+    .btn-icon {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      padding: 0.25rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-icon:hover {
+      color: var(--primary-color);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .active {
+      display: block;
+    }
+    
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    
+    .error-message {
+      color: var(--danger-color);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      min-height: 1.25rem;
+    }
+    
+    /* Loading indicator */
+    .button-loader {
+      display: none;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 0.5rem;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    button:disabled .button-text {
+      opacity: 0.8;
+    }
+    
+    button:disabled .button-loader {
+      display: inline-block;
+    }
+
+    .payment-status {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .payment-status.pending {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: var(--warning-color);
+    }
+
+    .payment-status.success {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--success-color);
+    }
+
+    .status-icon {
+      margin-right: 0.75rem;
+    }
+
+    .status-text {
+      font-weight: 500;
+    }
+
+    .payment-info {
+      background-color: rgba(31, 41, 55, 0.05);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      color: var(--text-light);
+    }
+
+    .value {
+      font-weight: 500;
+    }
+
+    .wallet-address-container {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .wallet-address-container h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: var(--secondary-color);
+    }
+
+    .qr-code-container {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .wallet-address {
+      background-color: rgba(31, 41, 55, 0.05);
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.875rem;
+      word-break: break-all;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .payment-instructions {
+      margin-bottom: 1.5rem;
+    }
+
+    .payment-instructions h3 {
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+      color: var(--secondary-color);
+    }
+
+    .payment-instructions ol {
+      padding-left: 1.5rem;
+      margin: 0;
+    }
+
+    .payment-instructions li {
+      margin-bottom: 0.5rem;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .success-message {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .success-message p {
+      margin: 0.5rem 0;
+    }
+
+    /* Notification system */
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 6px;
+      background-color: var(--secondary-color);
+      color: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      transition: opacity 0.3s ease;
+    }
+    
+    .notification.success {
+      background-color: var(--success-color);
+    }
+    
+    .notification.error {
+      background-color: var(--danger-color);
+    }
+    
+    .notification.fade-out {
+      opacity: 0;
+    }
+    
+    /* Loading states */
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    
+    @media (max-width: 640px) {
+      .payment-methods {
+        flex-direction: column;
+      }
+      
+      .payment-method {
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+      
+      .payment-method img {
+        margin-bottom: 0;
+        margin-right: 0.75rem;
+      }
+      
+      .notification {
+        left: 20px;
+        right: 20px;
+        text-align: center;
+      }
+    }
+  </style>
+
+  <script>
+    /**
+     * Generate a QR code and render it to a canvas element
+     * @param {string} text - The text to encode in the QR code
+     * @param {HTMLCanvasElement} canvas - The canvas element to render to
+     * @param {Object} options - Options for the QR code
+     * @returns {Promise<void>}
+     */
+    async function generateQRCodeToCanvas(text, canvas, options = {}) {
+      // Default options
+      const defaultOptions = {
+        width: 200,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: 'H', // High error correction
+        margin: 4
+      };
+      
+      // Merge options
+      const mergedOptions = { ...defaultOptions, ...options };
+      
+      try {
+        // Dynamically import the QRCode library
+        const QRCode = await import('https://cdn.jsdelivr.net/npm/qrcode@1.5.4/+esm');
+        
+        // Generate QR code on canvas
+        await QRCode.toCanvas(canvas, text, {
+          width: mergedOptions.width,
+          margin: mergedOptions.margin,
+          color: {
+            dark: mergedOptions.colorDark,
+            light: mergedOptions.colorLight
+          },
+          errorCorrectionLevel: mergedOptions.correctLevel
+        });
+      } catch (error) {
+        console.error('Error generating QR code to canvas:', error);
+        throw error;
+      }
+    }
+
+    // DOM Elements
+    const paymentFormContainer = document.getElementById('payment-form-container');
+    const paymentDetailsContainer = document.getElementById('payment-details-container');
+    const paymentSuccessContainer = document.getElementById('payment-success-container');
+    const paymentForm = document.getElementById('payment-form');
+    const paymentMethods = document.querySelectorAll('.payment-method');
+    const copyAddressButton = document.getElementById('copy-address');
+    const checkPaymentStatusButton = document.getElementById('check-payment-status');
+    const cancelPaymentButton = document.getElementById('cancel-payment');
+    
+    // Display Elements
+    const displayAmount = document.getElementById('display-amount');
+    const displayCryptoAmount = document.getElementById('display-crypto-amount');
+    const displayExchangeRate = document.getElementById('display-exchange-rate');
+    const displayPaymentMethod = document.getElementById('display-payment-method');
+    const displaySessionId = document.getElementById('display-session-id');
+    const displayExpires = document.getElementById('display-expires');
+    const walletAddressElement = document.getElementById('wallet-address');
+    const instructionAmount = document.getElementById('instruction-amount');
+    const qrCodeCanvas = document.getElementById('qr-code');
+    const confirmationEmail = document.getElementById('confirmation-email');
+    const transactionId = document.getElementById('transaction-id');
+
+    // State
+    let selectedPaymentMethod = 'btc';
+    let currentSession = null;
+    
+    // Default wallet addresses
+    const DEFAULT_ADDRESSES = {
+      eth: '0x402282c72a2f2b9f059C3b39Fa63932D6AA09f11',
+      btc: 'bc1q254klmlgtanf8xez28gy7r0enpyhk88r2499pt',
+      sol: 'CsTWZTbDryjcb229RQ9b7wny5qytH9jwoJy6Lu98xpeF',
+      usdc: '0x402282c72a2f2b9f059C3b39Fa63932D6AA09f11'
+    };
+    
+    let supportedCryptos = {
+      btc: { name: 'Bitcoin', address: DEFAULT_ADDRESSES.btc },
+      eth: { name: 'Ethereum', address: DEFAULT_ADDRESSES.eth },
+      sol: { name: 'Solana', address: DEFAULT_ADDRESSES.sol },
+      usdc: { name: 'USD Coin', address: DEFAULT_ADDRESSES.usdc }
+    };
+    let availableCryptos = Object.keys(supportedCryptos);
+
+    // Initialize
+    function init() {
+      // Parse URL parameters
+      parseUrlParameters();
+      
+      // Set up payment method selection with keyboard accessibility
+      paymentMethods.forEach(method => {
+        const cryptoCode = method.dataset.payment;
+        
+        // Hide payment methods that aren't in availableCryptos
+        if (!availableCryptos.includes(cryptoCode)) {
+          method.style.display = 'none';
+          return;
+        }
+        
+        // Click event
+        method.addEventListener('click', () => {
+          selectPaymentMethod(method);
+        });
+        
+        // Keyboard events for accessibility
+        method.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectPaymentMethod(method);
+          }
+        });
+      });
+      
+      // Select the first available crypto by default
+      if (availableCryptos.length > 0) {
+        const firstAvailableMethod = document.querySelector(`.payment-method[data-payment="${availableCryptos[0]}"]`);
+        if (firstAvailableMethod) {
+          selectPaymentMethod(firstAvailableMethod);
+        }
+      }
+
+      // Set up form validation
+      const amountInput = document.getElementById('amount');
+      const emailInput = document.getElementById('email');
+      
+      amountInput.addEventListener('input', () => {
+        validateAmount(amountInput.value);
+      });
+      
+      emailInput.addEventListener('input', () => {
+        validateEmail(emailInput.value);
+      });
+
+      // Set up form submission
+      paymentForm.addEventListener('submit', handleFormSubmit);
+
+      // Set up copy address button
+      copyAddressButton.addEventListener('click', copyWalletAddress);
+
+      // Set up check payment status button
+      checkPaymentStatusButton.addEventListener('click', checkPaymentStatus);
+
+      // Set up cancel payment button
+      cancelPaymentButton.addEventListener('click', cancelPayment);
+    }
+    
+    /**
+     * Parses URL parameters to customize payment options
+     */
+    function parseUrlParameters() {
+      try {
+        const url = new URL(window.location.href);
+        
+        // Check for single ticker parameter
+        const ticker = url.searchParams.get('ticker');
+        if (ticker) {
+          const tickerLower = ticker.toLowerCase();
+          if (supportedCryptos[tickerLower]) {
+            availableCryptos = [tickerLower];
+          }
+        }
+        
+        // Check for multiple tickers parameter
+        const tickers = url.searchParams.get('tickers');
+        if (tickers) {
+          const tickerArray = tickers.toLowerCase().split(',')
+            .filter(t => supportedCryptos[t.trim()]);
+          
+          if (tickerArray.length > 0) {
+            availableCryptos = tickerArray;
+          }
+        }
+        
+        // Reset addresses to defaults before applying custom ones
+        Object.keys(supportedCryptos).forEach(crypto => {
+          supportedCryptos[crypto].address = DEFAULT_ADDRESSES[crypto] || '';
+        });
+        
+        // Check for single recipient address
+        const recipientAddress = url.searchParams.get('recipient_address');
+        if (recipientAddress && availableCryptos.length === 1) {
+          supportedCryptos[availableCryptos[0]].address = recipientAddress;
+        }
+        
+        // Check for multiple recipient addresses
+        const multipleAddresses = url.searchParams.get('recipient_addresses');
+        if (multipleAddresses) {
+          try {
+            // Format could be "eth:0x123,btc:bc1abc,usdc:0xdef"
+            const addressPairs = multipleAddresses.split(',');
+            
+            addressPairs.forEach(pair => {
+              const [coin, address] = pair.split(':');
+              const coinLower = coin.toLowerCase().trim();
+              
+              if (supportedCryptos[coinLower] && address) {
+                supportedCryptos[coinLower].address = address.trim();
+              }
+            });
+          } catch (error) {
+            console.error('Error parsing recipient_addresses parameter:', error);
+          }
+        }
+        
+        console.log('Available cryptos:', availableCryptos);
+        console.log('Supported cryptos with addresses:', supportedCryptos);
+      } catch (error) {
+        console.error('Error parsing URL parameters:', error);
+      }
+    }
+    
+    /**
+     * Selects a payment method and updates UI and state
+     * @param {HTMLElement} method - The payment method element to select
+     */
+    function selectPaymentMethod(method) {
+      // Remove selected class and update ARIA attributes for all methods
+      paymentMethods.forEach(m => {
+        m.classList.remove('selected');
+        m.setAttribute('aria-checked', 'false');
+      });
+      
+      // Add selected class and update ARIA attributes for selected method
+      method.classList.add('selected');
+      method.setAttribute('aria-checked', 'true');
+      
+      // Update selected payment method
+      selectedPaymentMethod = method.dataset.payment;
+    }
+    
+    /**
+     * Validates amount input
+     * @param {string} value - The amount value to validate
+     * @returns {boolean} - Whether the amount is valid
+     */
+    function validateAmount(value) {
+      const amountError = document.getElementById('amount-error');
+      const amount = parseFloat(value);
+      
+      if (!value) {
+        amountError.textContent = 'Amount is required';
+        return false;
+      } else if (isNaN(amount) || amount <= 0) {
+        amountError.textContent = 'Please enter a valid amount';
+        return false;
+      } else {
+        amountError.textContent = '';
+        return true;
+      }
+    }
+
+    // Handle form submission
+    async function handleFormSubmit(event) {
+      event.preventDefault();
+      
+      const amountInput = document.getElementById('amount');
+      const emailInput = document.getElementById('email');
+      
+      // Validate form inputs
+      const isAmountValid = validateAmount(amountInput.value);
+      const isEmailValid = validateEmail(emailInput.value);
+      
+      if (!isAmountValid || !isEmailValid) {
+        // Focus the first invalid field
+        if (!isAmountValid) {
+          amountInput.focus();
+        } else {
+          emailInput.focus();
+        }
+        return;
+      }
+      
+      const amount = parseFloat(amountInput.value);
+      const email = emailInput.value;
+      
+      // Show loading state
+      const submitButton = event.target.querySelector('button[type="submit"]');
+      const originalButtonText = submitButton.textContent;
+      submitButton.disabled = true;
+      submitButton.textContent = 'Processing...';
+      
+      try {
+        // Create a local session object (standalone file without backend)
+        const sessionId = `crypto_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+        
+        // Get exchange rate (in a real app, this would come from an API)
+        const exchangeRates = {
+          btc: 50000,
+          eth: 3000,
+          sol: 100,
+          usdc: 1
+        };
+        
+        const exchangeRate = exchangeRates[selectedPaymentMethod];
+        const cryptoAmount = amount / exchangeRate;
+        
+        // Create session object
+        const session = {
+          id: sessionId,
+          status: 'pending',
+          customerEmail: email,
+          amount: amount,
+          currency: 'USD',
+          expiresAt: expiresAt,
+          providerData: {
+            coin: selectedPaymentMethod,
+            cryptoAmount: cryptoAmount,
+            exchangeRate: exchangeRate,
+            walletAddress: supportedCryptos[selectedPaymentMethod].address
+          }
+        };
+        
+        // Show notification
+        showNotification('Payment session created', 'info');
+        currentSession = session;
+        
+        // Update UI with session details
+        displayAmount.textContent = `$${session.amount.toFixed(2)}`;
+        displayCryptoAmount.textContent = `${session.providerData.cryptoAmount.toFixed(8)} ${session.providerData.coin.toUpperCase()}`;
+        displayExchangeRate.textContent = `$${session.providerData.exchangeRate.toFixed(2)}`;
+        displayPaymentMethod.textContent = `${getCryptoName(session.providerData.coin)} (${session.providerData.coin.toUpperCase()})`;
+        displaySessionId.textContent = session.id;
+        displayExpires.textContent = new Date(session.expiresAt).toLocaleString();
+        walletAddressElement.textContent = session.providerData.walletAddress;
+        instructionAmount.textContent = `${session.providerData.cryptoAmount.toFixed(8)} ${session.providerData.coin.toUpperCase()}`;
+        confirmationEmail.textContent = session.customerEmail;
+        
+        // Generate QR code
+        const qrData = `${session.providerData.coin}:${session.providerData.walletAddress}?amount=${session.providerData.cryptoAmount}`;
+        await generateQRCodeToCanvas(qrData, qrCodeCanvas, {
+          width: 200,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+          correctLevel: 'H',
+          margin: 4
+        });
+        
+        // Show payment details
+        paymentFormContainer.classList.remove('active');
+        paymentFormContainer.classList.add('hidden');
+        paymentDetailsContainer.classList.remove('hidden');
+        paymentDetailsContainer.classList.add('active');
+      } catch (error) {
+        console.error('Error creating checkout session:', error);
+        alert(`Error creating checkout session: ${error.message || 'Please try again'}`);
+      } finally {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+      }
+    }
+    
+    /**
+     * Validates email format
+     * @param {string} value - Email to validate
+     * @returns {boolean} - Whether email is valid
+     */
+    function validateEmail(value) {
+      const emailError = document.getElementById('email-error');
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+      if (!value) {
+        emailError.textContent = 'Email is required';
+        return false;
+      } else if (!re.test(value)) {
+        emailError.textContent = 'Please enter a valid email address';
+        return false;
+      } else {
+        emailError.textContent = '';
+        return true;
+      }
+    }
+
+    // Copy wallet address to clipboard
+    function copyWalletAddress() {
+      const walletAddress = walletAddressElement.textContent;
+      navigator.clipboard.writeText(walletAddress)
+        .then(() => {
+          // Show temporary success message
+          const originalText = copyAddressButton.innerHTML;
+          copyAddressButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          `;
+          copyAddressButton.style.color = 'var(--success-color)';
+          
+          setTimeout(() => {
+            copyAddressButton.innerHTML = originalText;
+            copyAddressButton.style.color = '';
+          }, 2000);
+        })
+        .catch(err => {
+          console.error('Error copying to clipboard:', err);
+          alert('Failed to copy address. Please select and copy manually.');
+        });
+    }
+
+    /**
+     * Check blockchain for transactions to the wallet address
+     * @param {string} coin - The cryptocurrency code
+     * @param {string} address - The wallet address
+     * @returns {Promise<{found: boolean, txid: string|null}>} - Whether a transaction was found and its ID
+     */
+    async function checkBlockchainForPayment(coin, address) {
+      showNotification('Checking blockchain for transactions...', 'info');
+      
+      try {
+        let response;
+        let data;
+        let found = false;
+        let txid = null;
+        
+        // Different APIs for different cryptocurrencies
+        switch(coin.toLowerCase()) {
+          case 'btc':
+            // Use Blockchain.info API for Bitcoin
+            response = await fetch(`https://blockchain.info/rawaddr/${address}`);
+            if (!response.ok) throw new Error('Failed to fetch Bitcoin transactions');
+            data = await response.json();
+            
+            // Check if there are any transactions in the last hour
+            const oneHourAgo = Date.now() - (60 * 60 * 1000);
+            const recentTx = data.txs.find(tx => tx.time * 1000 > oneHourAgo);
+            
+            if (recentTx) {
+              found = true;
+              txid = recentTx.hash;
+            }
+            break;
+            
+          case 'eth':
+          case 'usdc': // USDC on Ethereum
+            // Use Etherscan API for Ethereum and USDC
+            response = await fetch(`https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=desc`);
+            if (!response.ok) throw new Error('Failed to fetch Ethereum transactions');
+            data = await response.json();
+            
+            if (data.status === '1' && data.result.length > 0) {
+              // Check if there are any transactions in the last hour
+              const oneHourAgo = Date.now() - (60 * 60 * 1000);
+              const recentTx = data.result.find(tx => parseInt(tx.timeStamp) * 1000 > oneHourAgo);
+              
+              if (recentTx) {
+                found = true;
+                txid = recentTx.hash;
+              }
+            }
+            break;
+            
+          case 'sol':
+            // Use Solana Explorer API
+            response = await fetch(`https://api.solscan.io/account/transaction?address=${address}&limit=10`);
+            if (!response.ok) throw new Error('Failed to fetch Solana transactions');
+            data = await response.json();
+            
+            if (data.data && data.data.length > 0) {
+              // Check if there are any transactions in the last hour
+              const oneHourAgo = Date.now() - (60 * 60 * 1000);
+              const recentTx = data.data.find(tx => tx.blockTime * 1000 > oneHourAgo);
+              
+              if (recentTx) {
+                found = true;
+                txid = recentTx.txHash;
+              }
+            }
+            break;
+            
+          default:
+            throw new Error(`Unsupported cryptocurrency: ${coin}`);
+        }
+        
+        return { found, txid };
+      } catch (error) {
+        console.error(`Error checking ${coin} blockchain:`, error);
+        // If API fails, provide a manual verification option
+        const manualVerify = confirm(`Could not automatically verify ${coin.toUpperCase()} payment. Did you make the payment? Click OK to manually verify.`);
+        return {
+          found: manualVerify,
+          txid: manualVerify ? `manual_verification_${Date.now()}` : null
+        };
+      }
+    }
+    
+    // Check payment status
+    async function checkPaymentStatus() {
+      if (!currentSession) {
+        alert('No active payment session');
+        return;
+      }
+      
+      // Show loading state
+      const statusButton = document.getElementById('check-payment-status');
+      const originalButtonText = statusButton.textContent;
+      statusButton.disabled = true;
+      statusButton.textContent = 'Checking...';
+      
+      try {
+        showNotification('Checking payment status...', 'info');
+        
+        // Get the cryptocurrency and address from the current session
+        const coin = currentSession.providerData.coin;
+        const address = currentSession.providerData.walletAddress;
+        
+        // Check the blockchain for payment
+        const { found, txid } = await checkBlockchainForPayment(coin, address);
+        
+        if (found) {
+          // Show success notification
+          showNotification('Payment verified successfully!', 'success');
+          
+          // Update transaction ID
+          transactionId.textContent = txid || 'Transaction verified';
+          
+          // Show success container
+          paymentDetailsContainer.classList.remove('active');
+          paymentDetailsContainer.classList.add('hidden');
+          paymentSuccessContainer.classList.remove('hidden');
+          paymentSuccessContainer.classList.add('active');
+        } else {
+          // Show not found notification
+          showNotification('No payment found. Please try again later.', 'error');
+        }
+      } catch (error) {
+        console.error('Error checking payment status:', error);
+        alert(`Error checking payment status: ${error.message || 'Please try again'}`);
+      } finally {
+        // Reset button state
+        statusButton.disabled = false;
+        statusButton.textContent = originalButtonText;
+      }
+    }
+
+    // This function is intentionally removed as it's duplicated below
+
+    // Cancel payment
+    function cancelPayment() {
+      // In standalone mode, we just need to reset the UI
+      showNotification('Payment canceled', 'info');
+      
+      // Reset form and go back to payment form
+      paymentForm.reset();
+      paymentDetailsContainer.classList.remove('active');
+      paymentDetailsContainer.classList.add('hidden');
+      paymentFormContainer.classList.remove('hidden');
+      paymentFormContainer.classList.add('active');
+      currentSession = null;
+    }
+
+    // Helper function to get crypto name from code
+    function getCryptoName(code) {
+      return supportedCryptos[code]?.name || code;
+    }
+    
+    /**
+     * Shows a toast notification
+     * @param {string} message - Message to display
+     * @param {string} type - Type of notification (success, error, info)
+     */
+    function showNotification(message, type = 'info') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.textContent = message;
+      notification.setAttribute('role', 'alert');
+      notification.setAttribute('aria-live', 'assertive');
+      
+      // Add to document
+      document.body.appendChild(notification);
+      
+      // Remove after delay
+      setTimeout(() => {
+        notification.classList.add('fade-out');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+
+    // Add event listener for when DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+  
+  <!-- Open directly in browser with: file:///path/to/payment.html -->
+</body>
+</html>
