@@ -186,4 +186,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
+[![Crypto Payment](https://paybadge.profullstack.com/badge.svg)](https://paybadge.profullstack.com/?tickers=btc%2Ceth%2Csol%2Cusdc)
+
+
 **Made with ❤️ for the crypto community**
