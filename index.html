@@ -271,6 +271,8 @@
     </div>
   </div>
 
+    </div>
+
   <!-- Footer -->
   <footer class="page-footer">
     <div class="footer-content">
@@ -282,8 +284,6 @@
       <p class="footer-text">Made with ❤️ for the crypto community</p>
     </div>
   </footer>
-    </div>
-  </div>
 
   <style>
     :root {
@@ -495,7 +495,7 @@
     }
 
     .hidden {
-      display: none;
+      display: none !important;
     }
 
     .active {
@@ -711,7 +711,9 @@
         right: 20px;
         text-align: center;
       }
-/* Badge Generator Styles */
+    }
+
+    /* Badge Generator Styles */
     .generator-subtitle {
       color: var(--text-light);
       margin-bottom: 2rem;
@@ -807,8 +809,12 @@
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      padding: 0.25rem 0.5rem;
+      padding: 0.25rem 0.75rem;
       font-size: 0.75rem;
+      z-index: 10;
+      min-width: auto;
+      width: auto;
+      display: block;
     }
 
     .code-instructions {
@@ -835,9 +841,11 @@
     .footer-links {
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 2rem;
       margin-bottom: 1rem;
       flex-wrap: wrap;
+      text-align: center;
     }
 
     .footer-link {
@@ -868,7 +876,6 @@
         flex-direction: column;
         gap: 0.5rem;
       }
-    }
     }
   </style>
 
