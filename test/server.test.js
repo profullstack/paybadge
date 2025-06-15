@@ -102,8 +102,132 @@ describe('Badge Server (Hono)', () => {
       const json = await res.json();
       expect(json).to.have.property('name', 'PayBadge API');
       expect(json).to.have.property('endpoints');
-      expect(json).to.have.property('parameters');
+      expect(json).to.have.property('badgeParameters');
+      expect(json).to.have.property('codeGenerationParameters');
       expect(json).to.have.property('examples');
+    });
+  });
+
+  describe('GET /presets', () => {
+    it('should return available presets', async () => {
+      const req = new Request('http://localhost/presets');
+      const res = await app.fetch(req);
+
+      expect(res.status).to.equal(200);
+      const json = await res.json();
+      expect(json).to.have.property('presets');
+      expect(json).to.have.property('descriptions');
+      expect(json.presets).to.be.an('array');
+      expect(json.presets).to.include('bitcoin');
+      expect(json.presets).to.include('ethereum');
+    });
+  });
+
+  describe('POST /generate-code', () => {
+    it('should generate markdown code', async () => {
+      const req = new Request('http://localhost/generate-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          badgeParams: { leftText: 'donate', rightText: 'bitcoin' },
+          linkUrl: 'https://example.com',
+          altText: 'Bitcoin Donation',
+          format: 'markdown'
+        })
+      });
+      const res = await app.fetch(req);
+
+      expect(res.status).to.equal(200);
+      const json = await res.json();
+      expect(json).to.have.property('format', 'markdown');
+      expect(json).to.have.property('code');
+      expect(json.code).to.include('[![Bitcoin Donation]');
+      expect(json.code).to.include('leftText=donate');
+      expect(json.code).to.include('rightText=bitcoin');
+    });
+
+    it('should generate HTML code', async () => {
+      const req = new Request('http://localhost/generate-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          badgeParams: { leftText: 'support', rightText: 'project' },
+          linkUrl: 'https://example.com',
+          altText: 'Support Project',
+          format: 'html'
+        })
+      });
+      const res = await app.fetch(req);
+
+      expect(res.status).to.equal(200);
+      const json = await res.json();
+      expect(json).to.have.property('format', 'html');
+      expect(json).to.have.property('code');
+      expect(json.code).to.include('<a href="https://example.com"');
+      expect(json.code).to.include('<img src=');
+      expect(json.code).to.include('alt="Support Project"');
+    });
+
+    it('should require linkUrl parameter', async () => {
+      const req = new Request('http://localhost/generate-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          badgeParams: { leftText: 'test' }
+        })
+      });
+      const res = await app.fetch(req);
+
+      expect(res.status).to.equal(400);
+      const json = await res.json();
+      expect(json).to.have.property('error');
+    });
+  });
+
+  describe('POST /generate-all-formats', () => {
+    it('should generate both markdown and HTML formats', async () => {
+      const req = new Request('http://localhost/generate-all-formats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          badgeParams: { leftText: 'crypto', rightText: 'payment' },
+          linkUrl: 'https://example.com',
+          altText: 'Crypto Payment'
+        })
+      });
+      const res = await app.fetch(req);
+
+      expect(res.status).to.equal(200);
+      const json = await res.json();
+      expect(json).to.have.property('markdown');
+      expect(json).to.have.property('html');
+      expect(json.markdown).to.have.property('format', 'markdown');
+      expect(json.html).to.have.property('format', 'html');
+      expect(json.markdown.code).to.include('[![');
+      expect(json.html.code).to.include('<a href=');
+    });
+  });
+
+  describe('GET /preset/:presetName', () => {
+    it('should generate code using bitcoin preset', async () => {
+      const req = new Request('http://localhost/preset/bitcoin?linkUrl=https://example.com&format=markdown');
+      const res = await app.fetch(req);
+
+      expect(res.status).to.equal(200);
+      const json = await res.json();
+      expect(json).to.have.property('format', 'markdown');
+      expect(json).to.have.property('code');
+      expect(json.code).to.include('Bitcoin Payment');
+    });
+
+    it('should return error for unknown preset', async () => {
+      const req = new Request('http://localhost/preset/unknown?linkUrl=https://example.com');
+      const res = await app.fetch(req);
+
+      expect(res.status).to.equal(400);
+      const json = await res.json();
+      expect(json).to.have.property('error');
+      expect(json.error).to.include('Unknown preset');
     });
   });
 
@@ -177,6 +301,8 @@ describe('Badge Server (Hono)', () => {
       expect(html).to.include('PayBadge');
       expect(html).to.include('/badge.svg');
       expect(html).to.include('/badge-crypto.svg');
+      expect(html).to.include('Markdown');
+      expect(html).to.include('HTML');
     });
   });
 });
