@@ -125,7 +125,9 @@ Here's how you might set up payment badges for a complete project:
 If you find this project helpful, consider supporting it with cryptocurrency:
 
 ### Quick Donation
-[![Crypto Payment](https://paybadge.profullstack.com/badge.svg)](https://paybadge.profullstack.com/?tickers=btc,eth,usdc)
+
+[![Crypto Payment](https://paybadge.profullstack.com/badge.svg)](https://paybadge.profullstack.com/?tickers=btc%2Ceth%2Csol%2Cusdc)
+
 
 ### Specific Cryptocurrencies
 
