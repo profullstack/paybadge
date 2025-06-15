@@ -1474,6 +1474,12 @@
      * Shows the badge generator section
      */
     function showBadgeGenerator() {
+      // Hide the entire payment card container
+      const paymentCard = document.querySelector('.payment-card');
+      if (paymentCard) {
+        paymentCard.classList.add('hidden');
+      }
+      
       // Hide all other sections
       paymentFormContainer.classList.remove('active');
       paymentFormContainer.classList.add('hidden');
@@ -1491,6 +1497,12 @@
      * Hides the badge generator and returns to payment form
      */
     function hideBadgeGenerator() {
+      // Show the payment card container
+      const paymentCard = document.querySelector('.payment-card');
+      if (paymentCard) {
+        paymentCard.classList.remove('hidden');
+      }
+      
       badgeGeneratorContainer.classList.remove('active');
       badgeGeneratorContainer.classList.add('hidden');
       
