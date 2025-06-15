@@ -178,6 +178,110 @@
           <a href="/dashboard" class="btn-secondary">Go to Dashboard</a>
         </div>
       </section>
+<!-- Badge Generator Section -->
+      <section id="badge-generator-container" class="hidden" aria-labelledby="badge-generator-title">
+        <h2 id="badge-generator-title">🎯 GitHub Badge Generator</h2>
+        <p class="generator-subtitle">Generate custom payment badges for your GitHub README files</p>
+        
+        <div class="generator-form">
+          <div class="form-group">
+            <label for="badge-style">Badge Style</label>
+            <select id="badge-style" name="badge-style">
+              <option value="badge.svg">Standard Badge</option>
+              <option value="badge-crypto.svg">Enhanced Badge with Icon</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="crypto-selection">Supported Cryptocurrencies</label>
+            <div class="crypto-checkboxes">
+              <label class="checkbox-label">
+                <input type="checkbox" id="crypto-btc" value="btc" checked>
+                <span class="checkmark"></span>
+                Bitcoin (BTC)
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="crypto-eth" value="eth" checked>
+                <span class="checkmark"></span>
+                Ethereum (ETH)
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="crypto-sol" value="sol" checked>
+                <span class="checkmark"></span>
+                Solana (SOL)
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="crypto-usdc" value="usdc" checked>
+                <span class="checkmark"></span>
+                USDC
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="custom-addresses">Custom Wallet Addresses (Optional)</label>
+            <div class="address-inputs">
+              <div class="address-input-group">
+                <label for="btc-address">Bitcoin Address:</label>
+                <input type="text" id="btc-address" placeholder="bc1q..." class="address-input">
+              </div>
+              <div class="address-input-group">
+                <label for="eth-address">Ethereum Address:</label>
+                <input type="text" id="eth-address" placeholder="0x..." class="address-input">
+              </div>
+              <div class="address-input-group">
+                <label for="sol-address">Solana Address:</label>
+                <input type="text" id="sol-address" placeholder="..." class="address-input">
+              </div>
+              <div class="address-input-group">
+                <label for="usdc-address">USDC Address:</label>
+                <input type="text" id="usdc-address" placeholder="0x..." class="address-input">
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="badge-text">Badge Alt Text</label>
+            <input type="text" id="badge-text" value="Crypto Payment" placeholder="Crypto Payment">
+          </div>
+          
+          <button type="button" id="generate-badge" class="btn-primary">
+            Generate Badge Code
+          </button>
+        </div>
+        
+        <div id="generated-code" class="code-output hidden">
+          <h3>Generated README Code</h3>
+          <div class="code-preview">
+            <div id="badge-preview" class="badge-preview-container"></div>
+          </div>
+          <div class="code-block-container">
+            <textarea id="generated-markdown" readonly class="code-textarea"></textarea>
+            <button id="copy-code" class="btn-secondary copy-btn">Copy to Clipboard</button>
+          </div>
+          <p class="code-instructions">
+            Copy the code above and paste it into your GitHub README.md file where you want the payment badge to appear.
+          </p>
+        </div>
+        
+        <div class="action-buttons">
+          <button id="back-to-payment" class="btn-text">← Back to Payment</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="page-footer">
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="#" id="show-generator" class="footer-link">🎯 Badge Generator</a>
+        <a href="https://github.com/your-repo/paybadge/blob/main/EXAMPLES.md" target="_blank" class="footer-link">📋 Examples & Documentation</a>
+        <a href="https://github.com/your-repo/paybadge" target="_blank" class="footer-link">⭐ GitHub Repository</a>
+      </div>
+      <p class="footer-text">Made with ❤️ for the crypto community</p>
+    </div>
+  </footer>
     </div>
   </div>
 
@@ -607,6 +711,163 @@
         right: 20px;
         text-align: center;
       }
+/* Badge Generator Styles */
+    .generator-subtitle {
+      color: var(--text-light);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .generator-form {
+      margin-bottom: 2rem;
+    }
+
+    .crypto-checkboxes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+    }
+
+    .checkbox-label:hover {
+      background-color: rgba(224, 35, 55, 0.05);
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      margin-right: 0.5rem;
+    }
+
+    .address-inputs {
+      margin-top: 0.5rem;
+    }
+
+    .address-input-group {
+      margin-bottom: 1rem;
+    }
+
+    .address-input-group label {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      margin-bottom: 0.25rem;
+    }
+
+    .address-input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.875rem;
+    }
+
+    .code-output {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background-color: rgba(31, 41, 55, 0.05);
+      border-radius: 8px;
+    }
+
+    .badge-preview-container {
+      text-align: center;
+      margin: 1rem 0;
+      padding: 1rem;
+      background-color: white;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    .code-block-container {
+      position: relative;
+      margin: 1rem 0;
+    }
+
+    .code-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.875rem;
+      background-color: #1a202c;
+      color: #e2e8f0;
+      resize: vertical;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    .code-instructions {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      margin-top: 1rem;
+    }
+
+    /* Footer Styles */
+    .page-footer {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+    }
+
+    .footer-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+    }
+
+    .footer-link:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      text-decoration: none;
+    }
+
+    .footer-text {
+      margin: 0;
+      opacity: 0.8;
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 640px) {
+      .crypto-checkboxes {
+        grid-template-columns: 1fr;
+      }
+      
+      .footer-links {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
     }
   </style>
 
@@ -753,6 +1014,8 @@
       checkPaymentStatusButton.addEventListener('click', checkPaymentStatus);
 
       // Set up cancel payment button
+// Set up badge generator
+      setupBadgeGenerator();
       cancelPaymentButton.addEventListener('click', cancelPayment);
     }
     
@@ -1188,6 +1451,193 @@
           document.body.removeChild(notification);
         }, 300);
       }, 3000);
+    }
+// Badge Generator Elements
+    const badgeGeneratorContainer = document.getElementById('badge-generator-container');
+    const showGeneratorButton = document.getElementById('show-generator');
+    const backToPaymentButton = document.getElementById('back-to-payment');
+    const generateBadgeButton = document.getElementById('generate-badge');
+    const copyCodeButton = document.getElementById('copy-code');
+    const generatedCodeSection = document.getElementById('generated-code');
+    const generatedMarkdown = document.getElementById('generated-markdown');
+    const badgePreview = document.getElementById('badge-preview');
+    
+    /**
+     * Shows the badge generator section
+     */
+    function showBadgeGenerator() {
+      // Hide all other sections
+      paymentFormContainer.classList.remove('active');
+      paymentFormContainer.classList.add('hidden');
+      paymentDetailsContainer.classList.remove('active');
+      paymentDetailsContainer.classList.add('hidden');
+      paymentSuccessContainer.classList.remove('active');
+      paymentSuccessContainer.classList.add('hidden');
+      
+      // Show badge generator
+      badgeGeneratorContainer.classList.remove('hidden');
+      badgeGeneratorContainer.classList.add('active');
+    }
+    
+    /**
+     * Hides the badge generator and returns to payment form
+     */
+    function hideBadgeGenerator() {
+      badgeGeneratorContainer.classList.remove('active');
+      badgeGeneratorContainer.classList.add('hidden');
+      
+      // Show payment form
+      paymentFormContainer.classList.remove('hidden');
+      paymentFormContainer.classList.add('active');
+    }
+    
+    /**
+     * Generates the badge markdown code based on user selections
+     */
+    function generateBadgeCode() {
+      try {
+        // Get selected badge style
+        const badgeStyle = document.getElementById('badge-style').value;
+        
+        // Get selected cryptocurrencies
+        const selectedCryptos = [];
+        const cryptoCheckboxes = document.querySelectorAll('.crypto-checkboxes input[type="checkbox"]:checked');
+        cryptoCheckboxes.forEach(checkbox => {
+          selectedCryptos.push(checkbox.value);
+        });
+        
+        if (selectedCryptos.length === 0) {
+          alert('Please select at least one cryptocurrency');
+          return;
+        }
+        
+        // Get custom addresses
+        const customAddresses = {};
+        const btcAddress = document.getElementById('btc-address').value.trim();
+        const ethAddress = document.getElementById('eth-address').value.trim();
+        const solAddress = document.getElementById('sol-address').value.trim();
+        const usdcAddress = document.getElementById('usdc-address').value.trim();
+        
+        if (btcAddress) customAddresses.btc = btcAddress;
+        if (ethAddress) customAddresses.eth = ethAddress;
+        if (solAddress) customAddresses.sol = solAddress;
+        if (usdcAddress) customAddresses.usdc = usdcAddress;
+        
+        // Get badge text
+        const badgeText = document.getElementById('badge-text').value.trim() || 'Crypto Payment';
+        
+        // Build URL parameters
+        const baseUrl = 'https://paybadge.profullstack.com';
+        const params = new URLSearchParams();
+        
+        if (selectedCryptos.length === 1) {
+          params.append('ticker', selectedCryptos[0]);
+          
+          // Add single custom address if provided
+          const crypto = selectedCryptos[0];
+          if (customAddresses[crypto]) {
+            params.append('recipient_address', customAddresses[crypto]);
+          }
+        } else {
+          params.append('tickers', selectedCryptos.join(','));
+          
+          // Add multiple custom addresses if provided
+          const addressPairs = [];
+          selectedCryptos.forEach(crypto => {
+            if (customAddresses[crypto]) {
+              addressPairs.push(`${crypto}:${customAddresses[crypto]}`);
+            }
+          });
+          
+          if (addressPairs.length > 0) {
+            params.append('recipient_addresses', addressPairs.join(','));
+          }
+        }
+        
+        // Generate the markdown
+        const badgeUrl = `${baseUrl}/${badgeStyle}`;
+        const paymentUrl = `${baseUrl}/?${params.toString()}`;
+        const markdown = `[![${badgeText}](${badgeUrl})](${paymentUrl})`;
+        
+        // Update the preview
+        badgePreview.innerHTML = `<a href="${paymentUrl}" target="_blank"><img src="${badgeUrl}" alt="${badgeText}"></a>`;
+        
+        // Update the textarea
+        generatedMarkdown.value = markdown;
+        
+        // Show the generated code section
+        generatedCodeSection.classList.remove('hidden');
+        
+        // Scroll to the generated code
+        generatedCodeSection.scrollIntoView({ behavior: 'smooth' });
+        
+      } catch (error) {
+        console.error('Error generating badge code:', error);
+        alert('Error generating badge code. Please try again.');
+      }
+    }
+    
+    /**
+     * Copies the generated markdown to clipboard
+     */
+    function copyGeneratedCode() {
+      try {
+        generatedMarkdown.select();
+        generatedMarkdown.setSelectionRange(0, 99999); // For mobile devices
+        
+        navigator.clipboard.writeText(generatedMarkdown.value).then(() => {
+          // Show success feedback
+          const originalText = copyCodeButton.textContent;
+          copyCodeButton.textContent = 'Copied!';
+          copyCodeButton.style.backgroundColor = 'var(--success-color)';
+          
+          setTimeout(() => {
+            copyCodeButton.textContent = originalText;
+            copyCodeButton.style.backgroundColor = '';
+          }, 2000);
+        }).catch(() => {
+          // Fallback for older browsers
+          document.execCommand('copy');
+          showNotification('Code copied to clipboard!', 'success');
+        });
+      } catch (error) {
+        console.error('Error copying to clipboard:', error);
+        showNotification('Failed to copy. Please select and copy manually.', 'error');
+      }
+    }
+    
+    /**
+     * Sets up badge generator event listeners
+     */
+    function setupBadgeGenerator() {
+      if (showGeneratorButton) {
+        showGeneratorButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          showBadgeGenerator();
+        });
+      }
+      
+      if (backToPaymentButton) {
+        backToPaymentButton.addEventListener('click', hideBadgeGenerator);
+      }
+      
+      if (generateBadgeButton) {
+        generateBadgeButton.addEventListener('click', generateBadgeCode);
+      }
+      
+      if (copyCodeButton) {
+        copyCodeButton.addEventListener('click', copyGeneratedCode);
+      }
+      
+      // Auto-generate when form changes
+      const formInputs = document.querySelectorAll('#badge-generator-container input, #badge-generator-container select');
+      formInputs.forEach(input => {
+        input.addEventListener('change', () => {
+          if (!generatedCodeSection.classList.contains('hidden')) {
+            generateBadgeCode();
+          }
+        });
+      });
     }
 
     // Add event listener for when DOM is fully loaded
