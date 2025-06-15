@@ -1,0 +1,44 @@
+{
+  "name": "paybadge",
+  "version": "1.0.0",
+  "description": "Dynamic SVG badge generator for crypto payments",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "mocha test/**/*.test.js --recursive",
+    "test:watch": "mocha test/**/*.test.js --recursive --watch",
+    "lint": "eslint src/ test/",
+    "lint:fix": "eslint src/ test/ --fix",
+    "format": "prettier --write src/ test/",
+    "format:check": "prettier --check src/ test/",
+    "docker:build": "docker build -t paybadge .",
+    "docker:run": "docker run -p 3000:3000 paybadge"
+  },
+  "keywords": [
+    "crypto",
+    "payment",
+    "badge",
+    "svg",
+    "github",
+    "readme",
+    "hono"
+  ],
+  "author": "PayBadge Team",
+  "license": "MIT",
+  "dependencies": {
+    "@hono/node-server": "^1.14.4",
+    "hono": "^4.7.11"
+  },
+  "devDependencies": {
+    "@eslint/js": "^8.57.1",
+    "chai": "^4.5.0",
+    "eslint": "^8.57.1",
+    "mocha": "^10.8.2",
+    "prettier": "^3.5.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
