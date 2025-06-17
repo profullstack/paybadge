@@ -68,12 +68,6 @@
             </fieldset>
           </div>
           
-          <div class="form-group">
-            <label for="email">Email (for payment confirmation)</label>
-            <input type="email" id="email" name="email" required
-                   placeholder="your@email.com" aria-describedby="email-error">
-            <div id="email-error" class="error-message" aria-live="polite"></div>
-          </div>
           
           <button type="submit" class="btn-primary">
             <span class="button-text">Continue to Payment</span>
@@ -144,7 +138,7 @@
             <li>Send exactly <strong id="instruction-amount">0.00 BTC</strong> to the address above</li>
             <li>Scan the QR code with your wallet app or copy the address</li>
             <li>Wait for blockchain confirmation (may take 10-30 minutes)</li>
-            <li>Once confirmed, you'll receive a confirmation email</li>
+            <li>Check payment status using the button below</li>
           </ol>
         </div>
 
@@ -169,7 +163,6 @@
 
         <div class="success-message">
           <p>Thank you for your payment. Your transaction has been completed successfully.</p>
-          <p>A confirmation email has been sent to <span id="confirmation-email">your@email.com</span>.</p>
           <p>Transaction ID: <span id="transaction-id">-</span></p>
         </div>
 
@@ -358,27 +351,33 @@
     }
 
     .form-group {
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
     }
 
     label {
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
       font-weight: 500;
       color: var(--secondary-color);
+      font-size: 0.95rem;
     }
 
     input[type="number"],
-    input[type="email"] {
+    input[type="email"],
+    input[type="text"],
+    select {
       width: 100%;
-      padding: 0.75rem;
+      padding: 1rem 0.875rem;
       border: 1px solid var(--border-color);
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 1rem;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background-color: #fff;
+      box-sizing: border-box;
     }
 
-    input:focus {
+    input:focus,
+    select:focus {
       outline: none;
       border-color: var(--primary-color);
       box-shadow: 0 0 0 3px rgba(224, 35, 55, 0.1);
@@ -390,35 +389,37 @@
 
     .currency-symbol {
       position: absolute;
-      left: 0.75rem;
+      left: 0.875rem;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-light);
+      font-weight: 500;
     }
 
     .input-with-icon input {
-      padding-left: 1.75rem;
+      padding-left: 2rem;
     }
 
     .payment-methods {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 0.5rem;
+      gap: 1.25rem;
+      margin-top: 1rem;
+      padding: 0.5rem 0;
     }
 
     .payment-method {
       flex: 1;
-      min-width: 100px;
+      min-width: 120px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
+      padding: 1.25rem 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
       cursor: pointer;
       transition: all 0.2s;
-      background-color: rgba(31, 41, 55, 0.2);
+      background-color: rgba(31, 41, 55, 0.02);
     }
 
     .payment-method img {
@@ -427,10 +428,31 @@
       margin-bottom: 0.5rem;
     }
 
+    .payment-method:hover {
+      border-color: var(--primary-color);
+      background-color: rgba(224, 35, 55, 0.05);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.1);
+    }
+
     .payment-method.selected {
       border-color: var(--primary-color);
       background-color: rgba(224, 35, 55, 0.1);
-      box-shadow: 0 4px 6px -1px rgba(224, 35, 55, 0.2);
+      box-shadow: 0 4px 12px -1px rgba(224, 35, 55, 0.25);
+      transform: translateY(-1px);
+    }
+
+    fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    legend {
+      font-weight: 500;
+      color: var(--secondary-color);
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
     }
 
     .btn-primary {
@@ -983,7 +1005,6 @@
     const walletAddressElement = document.getElementById('wallet-address');
     const instructionAmount = document.getElementById('instruction-amount');
     const qrCodeCanvas = document.getElementById('qr-code');
-    const confirmationEmail = document.getElementById('confirmation-email');
     const transactionId = document.getElementById('transaction-id');
 
     // State
@@ -1045,14 +1066,9 @@
 
       // Set up form validation
       const amountInput = document.getElementById('amount');
-      const emailInput = document.getElementById('email');
       
       amountInput.addEventListener('input', () => {
         validateAmount(amountInput.value);
-      });
-      
-      emailInput.addEventListener('input', () => {
-        validateEmail(emailInput.value);
       });
 
       // Set up form submission
@@ -1180,24 +1196,16 @@
       event.preventDefault();
       
       const amountInput = document.getElementById('amount');
-      const emailInput = document.getElementById('email');
       
       // Validate form inputs
       const isAmountValid = validateAmount(amountInput.value);
-      const isEmailValid = validateEmail(emailInput.value);
       
-      if (!isAmountValid || !isEmailValid) {
-        // Focus the first invalid field
-        if (!isAmountValid) {
-          amountInput.focus();
-        } else {
-          emailInput.focus();
-        }
+      if (!isAmountValid) {
+        amountInput.focus();
         return;
       }
       
       const amount = parseFloat(amountInput.value);
-      const email = emailInput.value;
       
       // Show loading state
       const submitButton = event.target.querySelector('button[type="submit"]');
@@ -1225,7 +1233,6 @@
         const session = {
           id: sessionId,
           status: 'pending',
-          customerEmail: email,
           amount: amount,
           currency: 'USD',
           expiresAt: expiresAt,
@@ -1250,7 +1257,6 @@
         displayExpires.textContent = new Date(session.expiresAt).toLocaleString();
         walletAddressElement.textContent = session.providerData.walletAddress;
         instructionAmount.textContent = `${session.providerData.cryptoAmount.toFixed(8)} ${session.providerData.coin.toUpperCase()}`;
-        confirmationEmail.textContent = session.customerEmail;
         
         // Generate QR code
         const qrData = `${session.providerData.coin}:${session.providerData.walletAddress}?amount=${session.providerData.cryptoAmount}`;
@@ -1277,26 +1283,6 @@
       }
     }
     
-    /**
-     * Validates email format
-     * @param {string} value - Email to validate
-     * @returns {boolean} - Whether email is valid
-     */
-    function validateEmail(value) {
-      const emailError = document.getElementById('email-error');
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      
-      if (!value) {
-        emailError.textContent = 'Email is required';
-        return false;
-      } else if (!re.test(value)) {
-        emailError.textContent = 'Please enter a valid email address';
-        return false;
-      } else {
-        emailError.textContent = '';
-        return true;
-      }
-    }
 
     // Copy wallet address to clipboard
     function copyWalletAddress() {
