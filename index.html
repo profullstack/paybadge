@@ -1280,16 +1280,8 @@
           cryptoAmount = amount / exchangeRate;
         } catch (error) {
           console.error('Error fetching exchange rate:', error);
-          // Fallback to hardcoded rates if API fails
-          const fallbackRates = {
-            btc: 50000,
-            eth: 3000,
-            sol: 100,
-            usdc: 1
-          };
-          exchangeRate = fallbackRates[selectedPaymentMethod];
-          cryptoAmount = amount / exchangeRate;
-          showNotification('Using fallback exchange rates', 'warning');
+          // No fallback - fail if exchange rates cannot be fetched
+          throw new Error(`Unable to fetch current exchange rates for ${selectedPaymentMethod.toUpperCase()}. Please try again later.`);
         }
         
         // Create session object
