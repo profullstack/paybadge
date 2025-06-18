@@ -11,7 +11,7 @@
   <path fill="#4c1" d="M85 0h4v28h-4z"/>
   <rect rx="3" width="150.25" height="28" fill="url(#gradient)"/>
   <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="100">
-    <text transform="scale(.1)" x="425" y="175" textLength="650" fill="#fff">paybadge</text>
-    <text transform="scale(.1)" x="1176.25" y="175" textLength="452.5" fill="#333" font-weight="bold">crypto</text>
+    <text transform="scale(.1)" x="425" y="175" textLength="650" fill="#fff">PAYBADGE</text>
+    <text transform="scale(.1)" x="1176.25" y="175" textLength="452.5" fill="#333" font-weight="bold">CRYPTO</text>
   </g>
 </svg>
