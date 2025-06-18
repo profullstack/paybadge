@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150.25" height="28" role="img" aria-label="PAYBADGE: CRYPTO">
+  <title>PAYBADGE: CRYPTO</title>
+  <linearGradient id="gradient" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity="0.1"/>
+    <stop offset="1" stop-opacity="0.1"/>
+  </linearGradient>
+  <g shape-rendering="crispEdges">
+    <rect width="85" height="28" fill="#555"/>
+    <rect x="85" width="65.25" height="28" fill="#4c1"/>
+  </g>
+  <path fill="#4c1" d="M85 0h4v28h-4z"/>
+  <rect rx="3" width="150.25" height="28" fill="url(#gradient)"/>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="100">
+    <text transform="scale(.1)" x="425" y="175" textLength="650" fill="#fff">paybadge</text>
+    <text transform="scale(.1)" x="1176.25" y="175" textLength="452.5" fill="#333" font-weight="bold">crypto</text>
+  </g>
+</svg>
