@@ -1,22 +1,24 @@
 /**
  * Exchange Rate API Client
- * Fetches cryptocurrency exchange rates from exchange-rate.profullstack.com
+ * Fetches cryptocurrency exchange rates from api.profullstack.com
  */
 
 /**
  * Base URL for the exchange rate API
  */
-const EXCHANGE_RATE_API_BASE = 'https://exchange-rate.profullstack.com';
+const EXCHANGE_RATE_API_BASE = 'https://api.profullstack.com/api/exchange-rates';
 
 /**
  * Fetches current exchange rate for a cryptocurrency
  * @param {string} fromCurrency - Source currency (e.g., 'BTC', 'ETH')
  * @param {string} toCurrency - Target currency (e.g., 'USD', 'EUR')
- * @returns {Promise<number>} Exchange rate
+ * @param {Object} options - Optional parameters
+ * @param {boolean} options.includeMetadata - Whether to return full response with metadata
+ * @returns {Promise<number|Object>} Exchange rate or full response object
  */
-export async function getCurrentRate(fromCurrency, toCurrency = 'USD') {
+export async function getCurrentRate(fromCurrency, toCurrency = 'USD', options = {}) {
   try {
-    const url = `${EXCHANGE_RATE_API_BASE}/rate/${fromCurrency.toUpperCase()}/${toCurrency.toUpperCase()}`;
+    const url = `${EXCHANGE_RATE_API_BASE}/${fromCurrency.toLowerCase()}/${toCurrency.toLowerCase()}`;
     
     const response = await fetch(url, {
       method: 'GET',
@@ -32,8 +34,23 @@ export async function getCurrentRate(fromCurrency, toCurrency = 'USD') {
     
     const data = await response.json();
     
+    // Validate response format: {"crypto":"BTC","fiat":"USD","rate":104684.262648,"timestamp":"2025-06-19T01:19:32.994Z"}
     if (!data.rate || isNaN(parseFloat(data.rate))) {
       throw new Error('Invalid exchange rate data received');
+    }
+    
+    if (!data.crypto || !data.fiat || !data.timestamp) {
+      throw new Error('Incomplete exchange rate response received');
+    }
+    
+    // Return full response if metadata requested, otherwise just the rate
+    if (options.includeMetadata) {
+      return {
+        rate: parseFloat(data.rate),
+        crypto: data.crypto,
+        fiat: data.fiat,
+        timestamp: data.timestamp
+      };
     }
     
     return parseFloat(data.rate);
@@ -103,11 +120,14 @@ export async function convertCurrency(amount, fromCurrency, toCurrency = 'USD') 
 
 /**
  * Gets supported currencies from the API
- * @returns {Promise<Array<string>>} Array of supported currency codes
+ * @returns {Promise<{cryptos: Array<string>, fiats: Array<string>}>} Object with supported crypto and fiat currencies
  */
 export async function getSupportedCurrencies() {
+  // We only support these 4 cryptocurrencies (we have wallet addresses for them)
+  const SUPPORTED_CRYPTOS = ['BTC', 'ETH', 'SOL', 'USDC'];
+  
   try {
-    const url = `${EXCHANGE_RATE_API_BASE}/currencies`;
+    const url = `${EXCHANGE_RATE_API_BASE}/supported`;
     
     const response = await fetch(url, {
       method: 'GET',
@@ -118,16 +138,54 @@ export async function getSupportedCurrencies() {
     });
     
     if (!response.ok) {
-      // Fallback to common currencies if API doesn't have this endpoint
-      return ['BTC', 'ETH', 'SOL', 'USDC', 'USDT', 'ADA', 'DOT', 'LINK', 'UNI', 'MATIC'];
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
     }
     
     const data = await response.json();
-    return data.currencies || ['BTC', 'ETH', 'SOL', 'USDC'];
+    
+    if (!data.fiats || !Array.isArray(data.fiats)) {
+      throw new Error('Invalid supported currencies response format - missing fiats array');
+    }
+    
+    return {
+      cryptos: SUPPORTED_CRYPTOS, // Always return our fixed list of supported cryptos
+      fiats: data.fiats // Return all fiat currencies from the API
+    };
   } catch (error) {
     console.warn('Error getting supported currencies, using fallback:', error.message);
-    // Return common cryptocurrencies as fallback
+    // Return fallback currencies
+    return {
+      cryptos: SUPPORTED_CRYPTOS,
+      fiats: ['USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF', 'CNY', 'SEK', 'NZD']
+    };
+  }
+}
+
+/**
+ * Gets supported cryptocurrencies only (for backward compatibility)
+ * @returns {Promise<Array<string>>} Array of supported cryptocurrency codes
+ */
+export async function getSupportedCryptos() {
+  try {
+    const { cryptos } = await getSupportedCurrencies();
+    return cryptos;
+  } catch (error) {
+    console.warn('Error getting supported cryptos, using fallback:', error.message);
     return ['BTC', 'ETH', 'SOL', 'USDC', 'USDT', 'ADA', 'DOT', 'LINK', 'UNI', 'MATIC'];
+  }
+}
+
+/**
+ * Gets supported fiat currencies only
+ * @returns {Promise<Array<string>>} Array of supported fiat currency codes
+ */
+export async function getSupportedFiats() {
+  try {
+    const { fiats } = await getSupportedCurrencies();
+    return fiats;
+  } catch (error) {
+    console.warn('Error getting supported fiats, using fallback:', error.message);
+    return ['USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF', 'CNY', 'SEK', 'NZD'];
   }
 }
 
@@ -137,16 +195,9 @@ export async function getSupportedCurrencies() {
  */
 export async function checkApiHealth() {
   try {
-    const url = `${EXCHANGE_RATE_API_BASE}/health`;
-    
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    
-    return response.ok;
+    // Test the API by making a simple BTC/USD request
+    await getCurrentRate('BTC', 'USD');
+    return true;
   } catch (error) {
     console.warn('Exchange rate API health check failed:', error.message);
     return false;

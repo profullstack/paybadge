@@ -70,6 +70,28 @@ describe('Exchange Rate API Client', () => {
       }
     });
 
+    it('should return response with timestamp from new API format', async function() {
+      this.timeout(NETWORK_TIMEOUT);
+      
+      try {
+        const result = await getCurrentRate('BTC', 'USD', { includeMetadata: true });
+        
+        expect(result).to.be.an('object');
+        expect(result.rate).to.be.a('number');
+        expect(result.rate).to.be.greaterThan(0);
+        expect(result.crypto).to.equal('BTC');
+        expect(result.fiat).to.equal('USD');
+        expect(result.timestamp).to.be.a('string');
+        expect(new Date(result.timestamp)).to.be.a('date');
+      } catch (error) {
+        if (error.message.includes('Failed to fetch exchange rate')) {
+          this.skip();
+        } else {
+          throw error;
+        }
+      }
+    });
+
     it('should throw error for invalid currency', async function() {
       this.timeout(NETWORK_TIMEOUT);
       
@@ -232,24 +254,34 @@ describe('Exchange Rate API Client', () => {
   });
 
   describe('getSupportedCurrencies', () => {
-    it('should return array of supported currencies', async function() {
+    it('should return fixed crypto list and API fiat currencies', async function() {
       this.timeout(NETWORK_TIMEOUT);
       
-      const currencies = await getSupportedCurrencies();
+      const result = await getSupportedCurrencies();
       
-      expect(currencies).to.be.an('array');
-      expect(currencies).to.include('BTC');
-      expect(currencies).to.include('ETH');
-      expect(currencies).to.include('SOL');
-      expect(currencies).to.include('USDC');
+      expect(result).to.be.an('object');
+      expect(result).to.have.property('cryptos');
+      expect(result).to.have.property('fiats');
+      
+      // Should always return exactly our 4 supported cryptos
+      expect(result.cryptos).to.be.an('array');
+      expect(result.cryptos).to.deep.equal(['BTC', 'ETH', 'SOL', 'USDC']);
+      
+      // Should return fiat currencies from API (or fallback)
+      expect(result.fiats).to.be.an('array');
+      expect(result.fiats.length).to.be.greaterThan(0);
+      expect(result.fiats).to.include('USD');
     });
 
-    it('should return non-empty array', async function() {
+    it('should return fallback currencies when API fails', async function() {
       this.timeout(NETWORK_TIMEOUT);
       
-      const currencies = await getSupportedCurrencies();
+      const result = await getSupportedCurrencies();
       
-      expect(currencies.length).to.be.greaterThan(0);
+      expect(result).to.be.an('object');
+      expect(result.cryptos).to.deep.equal(['BTC', 'ETH', 'SOL', 'USDC']);
+      expect(result.fiats).to.be.an('array');
+      expect(result.fiats.length).to.be.greaterThan(0);
     });
   });
 

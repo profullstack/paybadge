@@ -1,27 +1,45 @@
 # 📊 Exchange Rate API Client
 
-A clean, modern JavaScript client for fetching cryptocurrency exchange rates from `https://exchange-rate.profullstack.com`.
+A clean, modern JavaScript client for fetching cryptocurrency exchange rates from `https://api.profullstack.com/api/exchange-rates`.
 
 ## 🚀 Overview
 
-This client replaces the previous Tatum SDK integration with a simple, lightweight API client that:
-- Fetches real-time cryptocurrency exchange rates
-- Supports multiple currencies and conversions
-- Handles errors gracefully with fallbacks
-- Works in both browser and Node.js environments
-- Requires no API keys or authentication
+This client provides real-time cryptocurrency exchange rates with:
+- **Real-time Data**: Fetches current cryptocurrency prices with timestamps
+- **Multiple Currency Support**: Support for major cryptocurrencies and fiat currencies
+- **Metadata Access**: Full response data including timestamps and currency info
+- **Batch Operations**: Get multiple exchange rates in parallel
+- **Error Handling**: Comprehensive error handling with meaningful messages
+- **Zero Dependencies**: Works in both browser and Node.js environments
+- **No Authentication**: No API keys or authentication required
 
 ## 📁 Files
 
 - **[`src/exchange-rate-client.js`](src/exchange-rate-client.js)** - Main API client module
 - **[`test/exchange-rate-client.test.js`](test/exchange-rate-client.test.js)** - Comprehensive test suite
+- **[`demo-exchange-rates.js`](demo-exchange-rates.js)** - Interactive demo script
 - **[`index.html`](index.html)** - Updated to use new client
+
+## 🎮 Quick Demo
+
+Run the interactive demo to see all functionality:
+
+```bash
+node demo-exchange-rates.js
+```
+
+This demonstrates:
+- Real-time exchange rates for major cryptocurrencies
+- Metadata retrieval with timestamps
+- Multiple currency batch fetching
+- Currency conversion examples
+- International fiat currency support
 
 ## 🔧 API Reference
 
 ### Core Functions
 
-#### `getCurrentRate(fromCurrency, toCurrency = 'USD')`
+#### `getCurrentRate(fromCurrency, toCurrency = 'USD', options = {})`
 Fetches current exchange rate between two currencies.
 
 ```javascript
@@ -34,13 +52,21 @@ console.log(`1 BTC = $${btcRate.toFixed(2)} USD`);
 // Get ETH to EUR rate
 const ethRate = await getCurrentRate('ETH', 'EUR');
 console.log(`1 ETH = €${ethRate.toFixed(2)} EUR`);
+
+// Get full response with metadata
+const btcData = await getCurrentRate('BTC', 'USD', { includeMetadata: true });
+console.log(`Rate: $${btcData.rate}, Updated: ${btcData.timestamp}`);
 ```
 
 **Parameters:**
 - `fromCurrency` (string) - Source currency code (e.g., 'BTC', 'ETH')
 - `toCurrency` (string, optional) - Target currency code (default: 'USD')
+- `options` (Object, optional) - Additional options
+  - `includeMetadata` (boolean) - Return full response with metadata
 
-**Returns:** `Promise<number>` - Exchange rate
+**Returns:**
+- `Promise<number>` - Exchange rate (default)
+- `Promise<Object>` - Full response object when `includeMetadata: true`
 
 #### `getMultipleRates(currencies, baseCurrency = 'USD')`
 Fetches rates for multiple currencies in parallel.
@@ -104,39 +130,34 @@ console.log('API is healthy:', isHealthy);
 
 ## 🌐 API Endpoints
 
-The client expects the following endpoints to be available at `https://exchange-rate.profullstack.com`:
+The client connects to: `https://api.profullstack.com/api/exchange-rates`
 
-### `GET /rate/{fromCurrency}/{toCurrency}`
-Returns exchange rate between two currencies.
+### `GET /{crypto}/{fiat}`
+Returns real-time exchange rate with metadata.
 
-**Example:** `GET /rate/BTC/USD`
-
-**Response:**
-```json
-{
-  "rate": 45000.50
-}
-```
-
-### `GET /currencies` (optional)
-Returns list of supported currencies.
+**Example:** `GET /btc/usd`
 
 **Response:**
 ```json
 {
-  "currencies": ["BTC", "ETH", "SOL", "USDC", "USDT", "ADA"]
+  "crypto": "BTC",
+  "fiat": "USD",
+  "rate": 104684.262648,
+  "timestamp": "2025-06-19T01:19:32.994Z"
 }
 ```
 
-### `GET /health` (optional)
-Health check endpoint.
+**Features:**
+- Real-time pricing data
+- Timestamp for data freshness
+- Consistent response format
+- Support for multiple fiat currencies (USD, EUR, etc.)
+- Case-insensitive currency codes
 
-**Response:**
-```json
-{
-  "status": "ok"
-}
-```
+### Supported Currency Pairs
+- **Cryptocurrencies**: BTC, ETH, SOL, USDC, USDT, ADA, DOT, LINK, UNI, MATIC
+- **Fiat Currencies**: USD, EUR, and more
+- **Format**: All requests use lowercase currency codes in the URL
 
 ## 🎯 Usage Examples
 

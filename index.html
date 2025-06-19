@@ -18,9 +18,21 @@
         <h2 id="payment-form-title">Enter Payment Details</h2>
         <form id="payment-form" novalidate>
           <div class="form-group">
-            <label for="amount">Amount (USD)</label>
+            <label for="fiat-currency">Fiat Currency</label>
+            <select id="fiat-currency" name="fiat-currency">
+              <option value="USD">USD - US Dollar</option>
+              <option value="EUR">EUR - Euro</option>
+              <option value="GBP">GBP - British Pound</option>
+              <option value="CAD">CAD - Canadian Dollar</option>
+              <option value="AUD">AUD - Australian Dollar</option>
+              <option value="JPY">JPY - Japanese Yen</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="amount">Amount</label>
             <div class="input-with-icon">
-              <span class="currency-symbol" aria-hidden="true">$</span>
+              <span class="currency-symbol" aria-hidden="true" id="currency-symbol">$</span>
               <input type="number" id="amount" name="amount" min="1" step="0.01" required
                      placeholder="0.00" aria-describedby="amount-error">
             </div>
@@ -1014,6 +1026,7 @@
 
     // State
     let selectedPaymentMethod = 'btc';
+    let selectedFiatCurrency = 'USD';
     let currentSession = null;
     
     // Default wallet addresses
@@ -1031,6 +1044,16 @@
       usdc: { name: 'USD Coin', address: DEFAULT_ADDRESSES.usdc }
     };
     let availableCryptos = Object.keys(supportedCryptos);
+
+    // Currency symbol mapping
+    const CURRENCY_SYMBOLS = {
+      USD: '$',
+      EUR: '€',
+      GBP: '£',
+      CAD: 'C$',
+      AUD: 'A$',
+      JPY: '¥'
+    };
 
     // Initialize
     function init() {
@@ -1068,6 +1091,15 @@
           selectPaymentMethod(firstAvailableMethod);
         }
       }
+
+      // Set up fiat currency selection
+      const fiatCurrencySelect = document.getElementById('fiat-currency');
+      const currencySymbolElement = document.getElementById('currency-symbol');
+      
+      fiatCurrencySelect.addEventListener('change', (e) => {
+        selectedFiatCurrency = e.target.value;
+        currencySymbolElement.textContent = CURRENCY_SYMBOLS[selectedFiatCurrency] || '$';
+      });
 
       // Set up form validation
       const amountInput = document.getElementById('amount');
@@ -1197,11 +1229,12 @@
     }
 
     /**
-     * Fetches real-time exchange rate from exchange-rate.profullstack.com
+     * Fetches real-time exchange rate from api.profullstack.com
      * @param {string} crypto - The cryptocurrency code (btc, eth, sol, usdc)
-     * @returns {Promise<number>} - The exchange rate in USD
+     * @param {string} fiatCurrency - The fiat currency code (USD, EUR, etc.)
+     * @returns {Promise<number>} - The exchange rate in the specified fiat currency
      */
-    async function fetchExchangeRate(crypto) {
+    async function fetchExchangeRate(crypto, fiatCurrency = 'USD') {
       const cryptoSymbolMap = {
         btc: 'BTC',
         eth: 'ETH',
@@ -1214,19 +1247,32 @@
         throw new Error(`Unsupported cryptocurrency: ${crypto}`);
       }
       
-      // For USDC, return 1 as it's pegged to USD
+      // For USDC, handle different fiat currencies
       if (crypto === 'usdc') {
-        return 1;
+        if (fiatCurrency === 'USD') {
+          return 1;
+        } else {
+          // Get USD to other fiat rate for USDC conversion
+          try {
+            const { getCurrentRate } = await import('./src/exchange-rate-client.js');
+            const usdToFiatRate = await getCurrentRate('BTC', fiatCurrency);
+            const usdToBtcRate = await getCurrentRate('BTC', 'USD');
+            return usdToFiatRate / usdToBtcRate; // Convert USD to target fiat
+          } catch (error) {
+            console.warn(`Could not get ${fiatCurrency} rate for USDC, using 1:`, error);
+            return 1;
+          }
+        }
       }
       
       try {
         // Import and use our exchange rate client module
         const { getCurrentRate } = await import('./src/exchange-rate-client.js');
-        const rate = await getCurrentRate(symbol, 'USD');
+        const rate = await getCurrentRate(symbol, fiatCurrency);
         return rate;
       } catch (error) {
-        console.error(`Error fetching ${symbol} exchange rate:`, error);
-        throw new Error(`Failed to fetch exchange rate for ${symbol}: ${error.message}`);
+        console.error(`Error fetching ${symbol}/${fiatCurrency} exchange rate:`, error);
+        throw new Error(`Failed to fetch exchange rate for ${symbol}/${fiatCurrency}: ${error.message}`);
       }
     }
 
@@ -1257,17 +1303,17 @@
         const sessionId = `crypto_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
         const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
         
-        // Get real-time exchange rate from Tatum.io API
+        // Get real-time exchange rate using selected fiat currency
         let exchangeRate;
         let cryptoAmount;
         
         try {
-          exchangeRate = await fetchExchangeRate(selectedPaymentMethod);
+          exchangeRate = await fetchExchangeRate(selectedPaymentMethod, selectedFiatCurrency);
           cryptoAmount = amount / exchangeRate;
         } catch (error) {
           console.error('Error fetching exchange rate:', error);
           // No fallback - fail if exchange rates cannot be fetched
-          throw new Error(`Unable to fetch current exchange rates for ${selectedPaymentMethod.toUpperCase()}. Please try again later.`);
+          throw new Error(`Unable to fetch current exchange rates for ${selectedPaymentMethod.toUpperCase()}/${selectedFiatCurrency}. Please try again later.`);
         }
         
         // Create session object
@@ -1275,7 +1321,7 @@
           id: sessionId,
           status: 'pending',
           amount: amount,
-          currency: 'USD',
+          currency: selectedFiatCurrency,
           expiresAt: expiresAt,
           providerData: {
             coin: selectedPaymentMethod,
@@ -1289,10 +1335,13 @@
         showNotification('Payment session created', 'info');
         currentSession = session;
         
+        // Get currency symbol for display
+        const currencySymbol = CURRENCY_SYMBOLS[selectedFiatCurrency] || selectedFiatCurrency;
+        
         // Update UI with session details
-        displayAmount.textContent = `$${session.amount.toFixed(2)}`;
+        displayAmount.textContent = `${currencySymbol}${session.amount.toFixed(2)}`;
         displayCryptoAmount.textContent = `${session.providerData.cryptoAmount.toFixed(8)} ${session.providerData.coin.toUpperCase()}`;
-        displayExchangeRate.textContent = `$${session.providerData.exchangeRate.toFixed(2)}`;
+        displayExchangeRate.textContent = `${currencySymbol}${session.providerData.exchangeRate.toFixed(2)}`;
         displayPaymentMethod.textContent = `${getCryptoName(session.providerData.coin)} (${session.providerData.coin.toUpperCase()})`;
         displaySessionId.textContent = session.id;
         displayExpires.textContent = new Date(session.expiresAt).toLocaleString();
