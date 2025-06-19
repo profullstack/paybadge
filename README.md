@@ -2,7 +2,7 @@
 
 A sleek, professional payment badge system for accepting cryptocurrency donations directly from your GitHub README files.
 
-![Crypto Payment Badge](./badge.svg)
+[![Crypto Payment](https://paybadge.profullstack.com/badge-large.svg)](https://paybadge.profullstack.com/?tickers=btc%2Ceth%2Csol%2Cusdc)
 
 ## 🚀 Quick Start
 
@@ -188,7 +188,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-[![Crypto Payment](https://paybadge.profullstack.com/badge.svg)](https://paybadge.profullstack.com/?tickers=btc%2Ceth%2Csol%2Cusdc)
-
+[![Crypto Payment](https://paybadge.profullstack.com/badge-large.svg)](https://paybadge.profullstack.com/?tickers=btc%2Ceth%2Csol%2Cusdc)
 
 **Made with ❤️ for the crypto community**
