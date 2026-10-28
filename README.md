@@ -158,10 +158,10 @@ Love this project? Support continued development:
 
 | Symbol | Name | Default Address |
 |--------|------|-----------------|
-| `btc` | Bitcoin | `bc1q254klmlgtanf8xez28gy7r0enpyhk88r2499pt` |
-| `eth` | Ethereum | `0x402282c72a2f2b9f059C3b39Fa63932D6AA09f11` |
-| `sol` | Solana | `CsTWZTbDryjcb229RQ9b7wny5qytH9jwoJy6Lu98xpeF` |
-| `usdc` | USD Coin | `0x402282c72a2f2b9f059C3b39Fa63932D6AA09f11` |
+| `btc` | Bitcoin | `19d1LpzVVkmFihCwKnKdN9ZEZyAasqsVPJ` |
+| `eth` | Ethereum | `0x3b5366CC2C35eE227Aa8ac409D9A56638CA53FA8` |
+| `sol` | Solana | `HdDcXrJytuAJZpLkd42iE7RALo26z1fMKEh7p5McEPRY` |
+| `usdc` | USD Coin | `0x3b5366CC2C35eE227Aa8ac409D9A56638CA53FA8` |
 
 ## 🔒 Security Features
 
